@@ -1,0 +1,222 @@
+name: Playwright CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+  smoke:
+    name: Smoke Tests
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Smoke (@smoke)
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          npx playwright test tests/ui --project=${{ matrix.browser }} --grep @smoke --reporter=github --reporter=html
+
+      - name: Upload Playwright report (smoke)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-smoke-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test-results (raw) (smoke)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-smoke-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 30
+
+  api:
+    name: API Tests
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          npx playwright test tests/api --project=api --reporter=github --reporter=html
+
+      - name: Upload Playwright report (api)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-api
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test-results (raw) (api)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-api
+          path: test-results/
+          retention-days: 30
+
+  network:
+    name: Network Tests
+    needs: api
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Network tests (@network)
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          npx playwright test tests/network --grep @network --reporter=github --reporter=html
+
+      - name: Upload Playwright report (network)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-network
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test-results (raw) (network)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-network
+          path: test-results/
+          retention-days: 30
+
+  regression:
+    name: Regression Tests
+    needs: network
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Regression (@regression)
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+        run: |
+          npx playwright test tests/ui --project=${{ matrix.browser }} --grep @regression --reporter=github --reporter=html
+
+      - name: Upload Playwright report (regression)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-regression-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test-results (raw) (regression)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-regression-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 30
+
+  upload-report:
+    name: Collect & Upload Combined Reports
+    needs: regression
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: combined-reports/
+
+      - name: List artifacts
+        run: ls -la combined-reports || true
+
+      - name: Re-upload combined reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-combined
+          path: combined-reports/
+          retention-days: 30

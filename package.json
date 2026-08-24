@@ -1,0 +1,22 @@
+{
+  "name": "commerce-qa-platform",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test --project=chromium --project=firefox --project=webkit --grep @smoke",
+    "test:regression": "npx playwright test --project=chromium --project=firefox --project=webkit --grep @regression",
+    "test:api": "npx playwright test --project=api",
+    "test:mobile": "npx playwright test --project=mobile-chrome --project=mobile-safari --grep @mobile",
+    "auth:record": "npx playwright test tests/helpers/save-auth-state.spec.js",
+    "show-report": "npx playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0"
+  }
+}

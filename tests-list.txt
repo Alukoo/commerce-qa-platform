@@ -1,0 +1,389 @@
+AUTHAPI-01 Register new user
+AUTHAPI-02 Login with valid credentials
+AUTHAPI-03 Login invalid credentials yields 401
+API-011 @api valid login (best-effort)
+API-012 @api invalid password returns 4xx
+API-013 @api missing username returns 4xx
+API-014 @api empty payload returns 4xx
+API-015 @api existing session returns 200/204 (best-effort)
+API-016 @api signup creates user or returns 4xx (best-effort)
+API-017 @api logout invalidates session (best-effort)
+API-018 @api rate limit or throttling (best-effort)
+API-019 @api malformed JSON returns 4xx
+API-020 @api token-protected endpoint requires Authorization header
+CARTAPI-01 Add item to cart
+CARTAPI-02 Get cart contents
+CARTAPI-03 Remove item from cart
+API-021 @api view cart returns 200
+API-022 @api add to cart returns 200
+API-023 @api delete invalid item returns 4xx
+API-024 @api viewcart payload shape
+API-025 @api update quantity adjusts totals (best-effort)
+API-026 @api clear cart removes items (best-effort)
+API-027 @api add duplicate item handled gracefully
+API-028 @api cart totals numeric and >= 0
+API-029 @api remove item returns 200/204
+API-030 @api unauthorized cart access returns 401/403
+ORDAPI-01 Create order via API
+ORDAPI-02 Get order by id
+ORDAPI-03 List orders
+ORDAPI-04 Cancel order (best-effort)
+ORDAPI-05 Validation error on bad payload
+PRODUCTAPI-01 List products
+PRODUCTAPI-02 Get product by id
+PRODUCTAPI-03 Search products
+PRODUCTAPI-04 Create product (may require auth)
+API-001 @api @smoke should return product list
+API-002 @api product detail returns 200
+API-003 @api response contains Items array
+API-004 @api product count greater than zero
+API-005 @api get product detail fields
+API-006 @api negative invalid product id returns 4xx
+API-007 @api pagination or limit support (best-effort)
+API-008 @api contract keys present (id,name,price)
+API-009 @api response JSON is valid
+API-010 @api items contain images or links
+API-031 @api purchase request (best-effort)
+API-032 @api purchase negative invalid payload
+API-033 @api purchase response contains order id (best-effort)
+API-034 @api missing card returns 4xx
+API-035 @api invalid card returns 4xx
+API-036 @api large amount handled (best-effort)
+API-037 @api duplicate purchase idempotency (best-effort)
+API-038 @api purchase status endpoint returns recent orders (best-effort)
+API-039 @api purchase accepts idempotency key header (best-effort)
+API-040 @api purchase negative malformed payload
+API -> UI end-to-end example
+record authenticated state
+NET-011 login request payload and response
+NET-021 Add to cart triggers /addtocart
+NET-001 homepage loads products from backend
+NET-031 Purchase triggers /purchase
+API: POST /login - valid
+API: POST /login - invalid credentials
+API: POST /users - create user
+API: GET /products - list
+API: GET /products/:id - details
+API: POST /products - create (admin)
+API: POST /cart - add item
+API: GET /cart - retrieve
+API: POST /orders - create order
+API: GET /orders/:id - order details
+API: 400 Bad Request schema validation
+API: 401 Unauthorized handling
+API: 500 Server error handling
+Valid login
+Invalid username
+Invalid password
+Both credentials invalid
+Empty username
+Empty password
+Both fields empty
+Logout
+Session persistence
+Session expiration
+Already authenticated user
+Special characters / whitespace / case sensitivity
+Add one product
+Add multiple products
+Remove product
+Remove all products
+Quantity updates
+Cart persistence across sessions
+Cart total calculation
+Duplicate products handling
+Empty cart view
+Navigation to checkout
+Valid checkout
+Missing name
+Missing address
+Invalid address
+Empty fields
+Multiple products checkout
+Price calculation accuracy
+Order confirmation page
+Cancel checkout
+Back navigation during checkout
+Payment method variations
+Invalid payment details
+Order creation
+Order confirmation email / UI
+Order history listing
+Order details view
+Multiple orders handling
+Product visibility
+Product count
+Category filtering - Phones
+Category filtering - Laptops
+Category filtering - Monitors
+Product details page
+Price validation
+Image validation
+Add to cart
+Remove from cart
+Sorting by price
+Sorting by name
+Pagination / infinite scroll
+Navigation to product page
+Invalid product (404)
+Out of stock behavior
+Product quick-view modal
+Currency display
+Accessibility checks on product list
+Performance: product list render time
+Valid registration
+Existing username
+Empty username
+Empty password
+Invalid username
+Invalid password
+Special characters
+Long username / Long password / Whitespace
+Exact match
+Partial match
+Case sensitivity
+No results
+Special characters
+Numbers in search
+Whitespace handling
+Empty search
+AUTH-01 Valid registration
+AUTH-02 Existing username registration
+AUTH-03 Empty username registration shows dialog
+AUTH-04 Valid login
+AUTH-05 Invalid username login shows dialog
+AUTH-06 Invalid password login shows dialog
+AUTH-07 Empty username login keeps modal open
+AUTH-08 Logout clears session
+AUTH-09 Session persistence after reload
+AUTH-10 Registration with special characters
+AUTH-11 Long username registration
+AUTH-12 Long password registration
+AUTH-13 Registration trims whitespace in username
+AUTH-14 Case sensitivity: login with different case fails
+AUTH-15 Logged-in user hides Log in link
+AUTH-16 Empty password registration shows dialog or keeps modal
+AUTH-17 Registration with whitespace-only username handled
+AUTH-18 Multiple failed login attempts show dialogs
+AUTH-19 Passwords with special characters are allowed
+AUTH-20 Unicode username registration
+AUTH-21 Login modal autofocuses username input
+AUTH-22 Signup modal autofocuses username input
+AUTH-23 Password inputs are of type password
+AUTH-24 Register two users and login with both
+AUTH-25 Logout removes welcome text
+AUTH-26 StorageState persists session across new context
+AUTH-27 SQL-like input in username rejected or handled
+AUTH-28 Very short password registration handled
+AUTH-29 Modal close returns focus to page
+AUTH-30 Registration then immediate login works
+AUTH-31 Login trims surrounding whitespace
+AUTH-32 Rapid consecutive registrations
+AUTH-33 Login visible in new tab (same context)
+AUTH-34 New page in same context preserves session
+AUTH-35 Login while already logged in has no Log in link
+AUTH-36 Signup success message contains expected wording
+AUTH-37 Emoji in username registration
+AUTH-38 Extremely long username login fails gracefully
+AUTH-39 Passwords with spaces are allowed or handled
+AUTH-40 Logout when not logged in leaves login link visible
+AUTH-41 Extremely long password registration (stress)
+AUTH-42 Login with wrong-case password fails
+AUTH-43 SQL injection in password handled
+AUTH-44 Save storageState after login to file
+AUTH-45 Use saved storageState to preserve session in new context
+AUTH-46 Successful signup closes modal or shows dialog
+AUTH-47 Password with only special characters
+AUTH-48 Numeric-only password registration handled
+AUTH-49 Sign up modal hides after successful signup
+AUTH-50 Logout non-error path: logout when logged in then login link present
+CART-01 Add single product to cart
+CART-02 Remove product from cart
+CART-03 Cart shows product name and price
+CART-04 Quantity update changes totals (if UI supports)
+CART-05 Empty cart shows placeholder
+CART-06 Cart persists across reload
+CART-07 Bulk add multiple different products
+CART-08 Remove non-existent item handled gracefully
+CART-09 Cart icon count updates (if present)
+CART-10 Price sum equals line-item sum (basic check)
+CART-11 Checkout button present (if applicable)
+CART-12 Guest checkout path exists (if applicable)
+CART-13 Coupon/discount input present (if supported)
+CART-14 Cart handles price rounding (basic)
+CART-15 Cart shows product image thumbnails
+CART-16 Edit item links back to product detail
+CART-17 Cart storage uses localStorage or cookies (smoke)
+CART-18 Clearing cart removes items
+CART-19 Cart page is reachable from nav
+CART-20 Negative quantity handled
+CHECKOUT-01 Place order modal opens from cart
+CHECKOUT-02 Modal form requires name
+CHECKOUT-03 Modal form requires credit card
+CHECKOUT-04 Successful purchase shows confirmation
+CHECKOUT-05 Purchase modal can be cancelled
+CHECKOUT-06 Order confirmation contains order id or total
+CHECKOUT-07 Invalid card number shows error (basic)
+CHECKOUT-08 Modal focuses first input on open
+CHECKOUT-09 Esc closes modal
+CHECKOUT-10 Multiple currencies show totals (if app supports)
+CHECKOUT-11 Shipping address persists in form between opens
+CHECKOUT-12 Guest checkout shows form (if different)
+CHECKOUT-13 Coupon application updates totals (if supported)
+CHECKOUT-14 Order details export or printable receipt available (if present)
+CHECKOUT-15 Multiple payment methods selectable (if available)
+CHECKOUT-16 Order confirmation email prompt appears (if shown)
+CHECKOUT-17 Prevent double submit on purchase
+CHECKOUT-18 Order history link present after purchase (if available)
+CHECKOUT-19 Shipping/country validation (basic)
+CHECKOUT-20 Refund/cancel policy visible on confirmation (if present)
+@smoke HOME-007 Phones category is visible
+HOME-008 Laptops category is visible
+HOME-009 Monitors category is visible
+HOME-010 Category navigation works
+@smoke HOME-001 Home page loads successfully
+HOME-002 Main navigation is visible
+HOME-003 Authentication buttons are visible
+@smoke HOME-004 Products are displayed
+HOME-005 Product cards contain names
+HOME-006 Product cards contain prices
+ORDERS-01 Order history page accessible when logged in
+ORDERS-02 Order list shows recent orders
+ORDERS-03 View order details page
+ORDERS-04 Order items match purchased items
+ORDERS-05 Search orders by id
+ORDERS-06 Filter orders by status
+ORDERS-07 Order status badges present
+ORDERS-08 Reorder from history works
+ORDERS-09 Cancel order UI available for cancellable orders
+ORDERS-10 Order total matches sum of items
+ORDERS-11 Order export CSV available
+ORDERS-12 Pagination works on orders list
+ORDERS-13 Order details include shipping address
+ORDERS-14 Download invoice after purchase
+ORDERS-15 Admin view shows all orders (if admin)
+ORDERS-16 Order timeline/activity visible
+ORDERS-17 Order notes can be added (if supported)
+ORDERS-18 Tracking number displayed when shipped
+ORDERS-19 Refund request UI available
+ORDERS-20 Filter by date range
+ORDERS-21 Order line item quantities are correct
+ORDERS-22 Securely redact sensitive data in UI
+ORDERS-23 Bulk order actions UI
+ORDERS-24 Order tags or labels present
+ORDERS-25 Permission denied for other users orders
+ORDERS-26 Reorder preserves quantities and options
+ORDERS-27 Order detail shows item images
+ORDERS-28 Order comments visible to admins
+ORDERS-29 Retry failed payment flow available
+ORDERS-30 Order list empty state shows helpful message
+ORDERS-31 Order phone number displayed and valid
+ORDERS-32 Order shows payment method
+ORDERS-33 Orders searchable by product name
+ORDERS-34 Order note history preserved
+ORDERS-35 Flagging or marking orders works
+ORDERS-36 Order totals currency consistent
+ORDERS-37 Order refunds show status
+ORDERS-38 Order CSV export headers correct
+ORDERS-39 Order timeline includes status changes
+ORDERS-40 Bulk export or admin reports available
+PROD-01 Product listing loads
+PROD-02 Categories are present
+PROD-03 Filter category shows fewer or equal products
+PROD-04 Open product details shows name and price
+PROD-05 Product image is visible on detail
+PROD-06 Add to cart shows dialog
+PROD-07 Price is a number
+PROD-08 Navigate back to home from product detail
+PROD-09 Pagination Next changes products
+PROD-10 Add two products to cart and verify cart has items
+PROD-11 Product description present
+PROD-12 Product detail URL contains id or product name
+PROD-13 Images have src attribute
+PROD-14 Add to cart twice for same product handled
+PROD-15 Product price on listing matches detail format
+PROD-16 Search box (if present) works for product name
+PROD-17 Product links are accessible
+PROD-18 Product card contains price and title
+PROD-19 Clicking product image opens detail
+PROD-20 Cart persists added items across reload
+PROD-21 Add to cart from listing (if button present)
+PROD-22 Detail shows multiple thumbnails (if available)
+PROD-23 Product image has alt text
+PROD-24 Listing titles are non-empty
+PROD-25 Prices include currency characters
+PROD-26 Laptops filter reduces listing (if laptops present)
+PROD-27 Sorting (if present) does not crash
+PROD-28 Detail has meta description (if available)
+PROD-29 Share or social link exists (if present)
+PROD-30 Product links are internal
+PROD-31 Quick view modal opens (if available)
+PROD-32 Add-to-cart increments nav cart marker (if shown)
+PROD-33 Remove from cart works (if cart UI exists)
+PROD-34 Checkout link is present (if applicable)
+PROD-35 Listing names are unique (basic check)
+PROD-36 Product shows category label (if present)
+PROD-37 Image naturalWidth > 0 (loads)
+PROD-38 Detail has back navigation
+PROD-39 Detail contains Add to cart button
+PROD-40 Detail URL retains identifier
+REG-01 Valid registration
+REG-02 Duplicate username registration
+REG-03 Empty username registration shows dialog
+REG-04 Empty password registration shows dialog or keeps modal
+REG-05 Long username registration
+REG-06 Long password registration
+REG-07 Special characters in username
+REG-08 Unicode username registration
+REG-09 SQL-like input in username rejected or handled
+REG-10 Whitespace-only username handled
+REG-11 Rapid consecutive registrations
+REG-12 Signup modal autofocuses username input
+REG-13 Registration success hides modal or shows dialog
+REG-14 Emoji in username registration
+REG-15 Registration trims whitespace in username
+REG-16 Numeric-only password handled
+REG-17 Username with dot (period)
+REG-18 Username with dash and underscore
+REG-19 Uppercase-only username registration
+REG-20 Numeric-only username registration handled
+REG-21 Password with repeated character allowed or rejected
+REG-22 Password at assumed minimum length (8) handled
+REG-23 Password below minimum length handled gracefully
+REG-24 Password with emoji characters
+REG-25 Register then login
+REG-26 Register then logout
+REG-27 Many signups detect server-side throttling or errors
+REG-28 JS-injection characters handled in username
+REG-29 Extremely long username (1000 chars) handled
+REG-30 Registration after clearing cookies/session
+REG-31 Non-ASCII accented username
+REG-32 CRLF characters in username are sanitized/handled
+REG-33 Same username with different case treated consistently
+REG-34 Password equals username handled safely
+REG-35 Save storageState after registration/login
+REG-36 Registration with leading/trailing spaces handled
+REG-37 Prevent multiple signup modals (double-click)
+REG-38 Email-like username allowed
+REG-39 Registration while storageState present does not fail
+REG-40 Signup modal has accessible role dialog
+SEARCH-01 Search box is present
+SEARCH-02 Typing shows suggestions (if available)
+SEARCH-03 Results match query (basic)
+SEARCH-04 Empty query yields full listing or skip
+SEARCH-05 Case-insensitive search
+SEARCH-06 Partial match returns results
+SEARCH-07 Special characters handled
+SEARCH-08 Long query truncation or handling
+SEARCH-09 No results message shown for unknown query
+SEARCH-10 Result links navigate to product
+SEARCH-11 Search respects category filter when combined
+SEARCH-12 Search input is accessible (aria)
+SEARCH-13 Clearing search resets results
+SEARCH-14 Highlighted terms in results (if available)
+SEARCH-15 Search works with pagination
+SEARCH-16 Search returns images for results
+SEARCH-17 Search handles numeric queries (sku/id)
+SEARCH-18 Search suggestions are keyboard navigable (if present)
+SEARCH-19 Backend API search returns successfully (smoke)
+SEARCH-20 Search input preserves value on navigation back
